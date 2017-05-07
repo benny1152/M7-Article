@@ -1,53 +1,25 @@
 {% extends "bootstrap/base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 {% block title %}
-    M7 Tech Note
+    Shout it out!
 {% endblock %}
 {% block content %}
-    <h1>Simple Login Form</h1>
-    <div id="register">
-        <h2>Register:</h2>
-        <form action='/register' method='POST'>
-            <table class="table table-striped">
-                <tr>
-                    <td>Email:</td>
-                    <td><input type="text" name="email"></td>
-                </tr>
-                <tr>
-                    <td>Name:</td>
-                    <td><input type="text" name="name"></td>
-                </tr>
-                <tr>
-                    <td>Password:</td>
-                    <td><input type="text" name="password"></td>
-                </tr>
-                <tr>
-                    <td>Confirm Password:</td>
-                    <td><input type="text" name="confirm"></td>
-                </tr>
-                <tr>
-                    <td><input type="submit" value="Register" class="button"></td>
-                </tr>
-            </table>
-        </form>
-    </div>
-    <div id="login">
-        <h2>Login:</h2>
-        <form action='/login' method='POST'>
-            <table class="table table-striped">
-                <tr>
-                    <td>Email:</td>
-                    <td><input type="text" name="email"></td>
-                </tr>
-                <tr>
-                    <td>Password:</td>
-                    <td><input type="text" name="password"></td>
-                </tr>
-                <tr>
-                    <td><input type="submit" value="Register" class="button"></td>
-                </tr>
-            </table>
-        </form>
-    </div>
-
+    <h1>Shout it out!</h1>
+    <h2>Send a message</h2>
+    {{ wtf.quick_form(form) }}
+    <h2>Past messages</h2>
+    <table class="table table-striped">
+        <tr>
+            <th>Time</th>
+            <th>Author</th>
+            <th>Message</th>
+        </tr>
+        {% for msg in messages %}
+            <tr>
+                <td>{{ msg.timestamp }}</td>
+                <td>{{ msg.author }}</td>
+                <td>{{ msg.message }}</td>
+            </tr>
+        {% endfor %}
+    </table>
 {% endblock %}

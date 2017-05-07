@@ -1,4 +1,5 @@
 import logging
+import datetime
 
 from flask import Flask, jsonify, request
 from flask_bcrypt import Bcrypt
@@ -15,8 +16,9 @@ logging.basicConfig(level=logging.DEBUG)
 mongo = MongoClient("db", 27017)
 
 
-# The collection containing the information about the users
+# The collections containing the information about the users and messages
 users_collection = mongo.database.users
+messages_collection = mongo.database.messages
 
 
 @app.route('/login', methods=['POST'])
@@ -54,6 +56,39 @@ def register():
         data['result'] = {'success': False}
         data['error'] = "Example Error Message"
     return jsonify(data)
+
+
+@app.route('/messages')
+def get_all_messages():
+    # List containing the relevant fields of all previous messages (most recent first).
+    messages = [{"author": x['author'],
+                 "message": x['message'],
+                 "timestamp": x['timestamp']
+                 } for x in messages_collection.find({}).sort("timestamp", -1)]
+    return jsonify({
+        "error": None,
+        "data": messages
+    })
+
+
+@app.route('/send', methods=['POST'])
+def send_message():
+    # Load the content of the POST request.
+    data = request.get_json()
+    # Retrieve the current timestamp to store with the message content.
+    timestamp = datetime.datetime.now()
+    # Log the received message (should be stored in MongoDB later).
+    app.logger.debug("Message '{}' from '{}' received at '{}'".format(data['message'], data['author'], str(timestamp)))
+    # Store the record in MongoDB
+    messages_collection.insert_one({'message': data['message'], 'author': data['author'], 'timestamp': str(timestamp)})
+    return jsonify({
+        "error": None,
+        "data": {
+            "author": data['author'],
+            "message": data['message'],
+            "timestamp": str(timestamp)
+        }
+    })
 
 
 def main():
