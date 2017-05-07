@@ -1,0 +1,41 @@
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block title %}
+    M7 Tech Note
+{% endblock %}
+{% block content %}
+    <h1>Simple Login Form</h1>
+    <div id="register">
+        <h2>Register:</h2>
+        <ul class="text" id="disp">
+            <li>Email:</li>
+            <li>Name:</li>
+            <li>Password:</li>
+            <li>Confirm Password:</li>
+        </ul>
+        <form action='/register' method='POST'>
+            <ul>
+                <li><input type="text" name="email"></li>
+                <li><input type="text" name="name"></li>
+                <li><input type="password" name="password"></li>
+                <li><input type="password" name="confirm"></li>
+                <li><input type="submit" value="Register" class="button"></li>
+            </ul>
+        </form>
+    </div>
+    <div id="login">
+            <h2>Login:</h2>
+            <ul class="text" id="disp">
+                <li>Email:</li>
+                <li>Password:</li>
+            </ul>
+            <form action='/login' method='POST'>
+                <ul>
+                    <li><input type="text" name="email" value = {{get_flashed_messages(category_filter=["email"])[0]}}></li>
+                    <li><input type="password" name="password"></li>
+                    <li><input type="submit" value="Login" class="button"></li>
+                </ul>
+            </form>
+    </div>
+
+{% endblock %}

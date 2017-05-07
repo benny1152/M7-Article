@@ -1,0 +1,23 @@
+version: '2'
+services:
+    web:
+        build: ./web
+        command: python -u main.py
+        ports:
+            - "15000:5000"
+        volumes:
+            - ./web:/code
+        links:
+            - api
+    api:
+        build: ./api
+        command: python -u main.py
+        expose:
+            - "5000"
+        volumes:
+            - ./api:/code
+        links:
+            - db
+    db:
+        image: mongo:3.4
+        command: --smallfiles --rest
