@@ -13,7 +13,7 @@ services:
         build: ./api
         command: python -u main.py
         expose:
-            - "5000"
+            - "5010"
         volumes:
             - ./api:/code
         links:
